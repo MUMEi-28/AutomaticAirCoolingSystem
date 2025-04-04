@@ -4,10 +4,6 @@
 LiquidCrystal_I2C lcd(0x27, 16, 2); // LCD object with 16cols x 2rows
 
 // Define fan pins
-#define fanPin 5
-#define DIRA 3 // Motor spin direction A
-#define DIRB 4// Motor spin direction B 
-
 // L298N DC motor pins
 #define MOTOR_ENA 9
 #define MOTOR_IN1 10
@@ -38,24 +34,23 @@ void setup() {
   lcd.print("Temp:"); // print temp
   lcd.setCursor(0,1); // move to col 0, row 1
   lcd.print("Humidity:"); // print        
-
-  // FAN INITTIALZIE
-  pinMode(fanPin, OUTPUT); // set to output 
-  digitalWrite(fanPin, HIGH); // default state is high 
-  pinMode(DIRA,OUTPUT); // set to output 
-  pinMode(DIRB,OUTPUT); // set to output 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
 
-//  TemperatureHumiditySensor();
-TurnOnMotor();
+  TemperatureHumiditySensor();
+
+/* TurnOnMotor(); */
+
+  fanLogic();
 }
 
 void TurnOnMotor()
 {
-  analogWrite(MOTOR_ENA, 255); // analog to, pede magkaroon ng discrete values. if trippings then add speed control (:
+  analogWrite(MOTOR_ENA, 150); // analog to, pede magkaroon ng discrete values[0-255]. if trippings then add speed control (:
+  // 150 value lang muna, malakas ikot masyado ng 255 nililipad buong motor fan HAHAHHAHAHHA
+
   digitalWrite(MOTOR_IN1, HIGH); // Pampaikot ng motor, forward direction
   digitalWrite(MOTOR_IN2, LOW); // IDK, pero ayaw gumana kung wala to
 }
@@ -64,8 +59,8 @@ void TemperatureHumiditySensor()
 {
   delay(1000);//Wait before accessing Sensor
 
-   temperature = DHT.temperature; // Read temp
-   humidity = DHT.humidity;  // Set humidity
+  temperature = DHT.temperature; // Read temp
+  humidity = DHT.humidity;  // Set humidity
 
   DHT.read11(DHT_PIN); // Read data on pin 7
   
@@ -81,7 +76,7 @@ void TemperatureHumiditySensor()
 
 }
 
-void TESTING()
+void TESTING() // Testing ng sensor kasi nasira, kunwari sensor to
 {
   for(int i = 0; i <= 5; i++)
   {
@@ -101,16 +96,13 @@ void TESTING()
 void fanLogic()
 {
 
-   // FAN LOGIC
-  if(temperature >= 5.0)
+   // FAN LOGIC 
+  if(temperature >= 35.0) // Wag 30c, default 30c temp pag gabi e. ewan ko lang pag tanghali
   {
-    digitalWrite(fanPin, HIGH); // turn fan on
-    digitalWrite(DIRA, HIGH); // set motor direction 
-    digitalWrite(DIRB, LOW); // idk
-
+    TurnOnMotor();
   }
   else
   {
-    digitalWrite(fanPin, LOW); // turn fan off
+    analogWrite(MOTOR_ENA, 0); // turn fan off
   } 
 }
