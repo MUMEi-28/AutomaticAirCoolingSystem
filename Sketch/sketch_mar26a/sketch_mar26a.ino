@@ -57,23 +57,44 @@ void TurnOnMotor()
 
 void TemperatureHumiditySensor()
 {
-  delay(1000);//Wait before accessing Sensor
+/*   delay(1000);//Wait before accessing Sensor
+ */
+  DHT.read11(DHT_PIN); // Read data on pin 7
 
   temperature = DHT.temperature; // Read temp
   humidity = DHT.humidity;  // Set humidity
 
-  DHT.read11(DHT_PIN); // Read data on pin 7
+  // Print sa monitor, nasira din LCD e
+  PrintOnMonitor();
+;
   
-  // PRINTING LANG KASI WALA LCD [DITO NA PRINT SERIAL MONITOR YUNG SERIAL BEGIN SA TAAS]
+  delay(2000);//Wait 5 seconds MAXIMUM 2SEC, idk what happens if less than that and am not willing to find out.
+DisplayStuffLcd();
+}
+void PrintOnMonitor()
+{
+    // PRINTING LANG KASI WALA LCD [DITO NA PRINT SERIAL MONITOR YUNG SERIAL BEGIN SA TAAS]
   Serial.print("Current humidity = ");
   Serial.print(humidity);
   Serial.print("%  ");
   Serial.print("temperature = ");
   Serial.print(temperature); 
   Serial.println("C  ");
-  
-  delay(5000);//Wait 5 seconds MAXIMUM 2SEC, idk what happens if less than that and am not willing to find out.
+}
 
+void DisplayStuffLcd()
+{
+   // LCD STUFFS
+    lcd.setCursor(0,0);
+    lcd.print("Temp: " );
+    lcd.print(temperature);
+    lcd.print("C" );
+
+    // walang print line e, ayaw din mag concatenate
+    lcd.setCursor(0, 1);
+    lcd.print("Humidity: " );
+    lcd.print(humidity);
+    lcd.print("%" );
 }
 
 void TESTING() // Testing ng sensor kasi nasira, kunwari sensor to
@@ -97,7 +118,7 @@ void fanLogic()
 {
 
    // FAN LOGIC 
-  if(temperature >= 35.0) // Wag 30c, default 30c temp pag gabi e. ewan ko lang pag tanghali
+  if(temperature >= 40.0) // Wag 30c, default 30c temp pag gabi e. tas 35c naman tanghali GG
   {
     TurnOnMotor();
   }
