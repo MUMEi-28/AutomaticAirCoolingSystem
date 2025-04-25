@@ -9,6 +9,10 @@ LiquidCrystal_I2C lcd(0x27, 16, 2); // LCD object with 16cols x 2rows
 #define MOTOR_IN1 10
 #define MOTOR_IN2 11
 
+#define MOTOR_ENB 2 // Pangalawang dc fan
+#define MOTOR_IN3 3
+#define MOTOR_IN4 4
+
 // Sensor
 dht DHT; // DHT object
 #define DHT_PIN 7 // DHT11 data pin connected to pin 7
@@ -39,7 +43,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
 
-  TemperatureHumiditySensor();
+  TemperatureHumiditySensor();  
 
 /* TurnOnMotor(); */
 
@@ -53,6 +57,13 @@ void TurnOnMotor()
 
   digitalWrite(MOTOR_IN1, HIGH); // Pampaikot ng motor, forward direction
   digitalWrite(MOTOR_IN2, LOW); // IDK, pero ayaw gumana kung wala to
+
+
+  // Secondary fan
+  analogWrite(MOTOR_ENB, 150);
+
+  digitalWrite(MOTOR_IN3, HIGH);
+  digitalWrite(MOTOR_IN4, LOW);
 }
 
 void TemperatureHumiditySensor()
