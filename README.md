@@ -7,7 +7,6 @@ This project demonstrates an **Automatic Cooling System** that monitors environm
 - Real-time monitoring of temperature (°C) and humidity (%)
 - Automatic activation of a cooling fan when temperature exceeds a set limit
 - Visual feedback via 16x2 LCD display
-- Adjustable threshold values for customization
 
 ## Design and Simulation
 
